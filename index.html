@@ -9,24 +9,30 @@
         /* --- 全局重置 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        body {
+           body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
             background-color: #f7f8fa;
             color: #333;
-            /* 禁止身体滚动，由容器滚动，防止微信下拉露底 */
+            /* 禁止身体滚动，由容器滚动 */
             overflow: hidden; 
             height: 100%;
+            /* 防止 iOS 橡皮筋效果 */
+            position: fixed;
+            width: 100%;
         }
 
         /* --- 主容器 --- */
         .app-container {
             height: 100%;
+            width: 100%;
             overflow-y: auto; /* 允许内部滚动 */
             -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
             background-color: #fff;
             max-width: 600px;
             margin: 0 auto;
             position: relative;
+            /* 确保内容超出时能滚动 */
+            overscroll-behavior-y: contain; 
         }
 
         /* --- 导航栏 --- */
@@ -169,9 +175,9 @@
             name: "上海海事大学",
             date: "2026-3-25",
             photos: [
-                "images/上海理事大学/7e603da568912e75593780ecab3936a8.jpg",
-                "images/上海理事大学/45602bae87b22a71c5e8b18884e77c91.jpg",
-                "images/上海理事大学/a469cee2b1ae767d1da3135780dd7e1a.jpg"
+                "images/上海海事大学/7e603da568912e75593780ecab3936a8.jpg",
+                "images/上海海事大学/45602bae87b22a71c5e8b18884e77c91.jpg",
+                "images/上海海事大学/a469cee2b1ae767d1da3135780dd7e1a.jpg"
             ]
         }, 
         {
@@ -179,9 +185,9 @@
             name: "上海理工大学",
             date: "2026-3-27",
             photos: [
-                "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80",
-                "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80",
-                "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&q=80"
+                "images/上海理工大学/8f641ee87a4e3d6d5630e9b04be2f59a.jpg",
+                "images/上海理工大学/9dfe84cdeb49f80f6acb1ba35f4032da.jpg",
+                "images/上海理工大学/9fef6b09ff57ea2a0b3177051ae5ae39.jpg"
             ]
         },
         {
@@ -189,35 +195,39 @@
             name: "上海建桥学院",
             date: "2026-4-2",
             photos: [
-                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
-                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+                "images/上海建桥学院/2aea0828167e28ffddc042e0b7843fa0.jpg",
+                "images/上海建桥学院/cb1e0bef03db8807433882bfd38e9cc6.jpg",
+                "images/上海建桥学院/ec38fb1d5a419e3d6982f69afdbbd436.jpg"
             ]
-        }
+        },
          {
             id: 4,
             name: "安徽信息工程学院",
             date: "2026-4-8",
             photos: [
-                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
-                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+                "images/安徽信息工程学院/46a65a8d731b6c7ba5cc4431498aa5e0.jpg",
+                "images/安徽信息工程学院/47446067926379058fad61545c926b06.jpg",
+                "images/安徽信息工程学院/d1ef08c90a10de6c564787f63047b7fa.jpg"
             ]
-        }
+        },
          {
             id: 5,
             name: "安徽建筑大学",
             date: "2026-4-17",
             photos: [
-                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
-                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+                "images/安徽建筑大学/cb5aae746f3f547662620e04163dd663.jpg",
+                "images/安徽建筑大学/e87664c1ed466394b69ceabf253cea08.jpg",
+                "images/安徽建筑大学/f4308d046c828377874b6b8a081184fe.jpg"
             ]
-        }
+        },
          {
             id: 6,
             name: "中国传媒大学",
             date: "2026-4-23",
             photos: [
-                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
-                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+                "images/中国传媒大学/6ab8986c3c96ccb86d15dae6dfae42c3.jpg",
+                "images/中国传媒大学/b2678f995ca370c7d1225d2f397e6220.jpg",
+                "images/中国传媒大学/eb3f83df840994571b5c667b117ba8e0.jpg"
             ]
         }
         
