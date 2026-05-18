@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 关键：width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no 禁止缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>高校宣讲回顾</title>
+    <style>
+        /* --- 全局重置 --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background-color: #f7f8fa;
+            color: #333;
+            /* 禁止身体滚动，由容器滚动，防止微信下拉露底 */
+            overflow: hidden; 
+            height: 100%;
+        }
+
+        /* --- 主容器 --- */
+        .app-container {
+            height: 100%;
+            overflow-y: auto; /* 允许内部滚动 */
+            -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+            background-color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- 导航栏 --- */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50px;
+        }
+
+        .nav-title { font-size: 17px; font-weight: 600; color: #000; }
+        .back-btn { font-size: 14px; color: #576b95; cursor: pointer; display: none; padding: 5px; }
+
+        /* --- 页面切换 --- */
+        .page { display: none; padding: 16px; animation: slideIn 0.3s ease-out; }
+        .page.active { display: block; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- 列表页样式 --- */
+        .school-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f5f5f5;
+        }
+        .school-card:active { background-color: #fafafa; }
+        
+        .card-info h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+        .card-info p { font-size: 12px; color: #999; }
+        .arrow { color: #ccc; font-size: 18px; }
+
+        /* --- 详情页样式 --- */
+        .detail-header { margin-bottom: 20px; padding-left: 4px; }
+        .detail-title { font-size: 22px; font-weight: bold; margin-bottom: 6px; }
+        .detail-date { font-size: 13px; color: #888; }
+
+        .photo-wall {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding-bottom: 40px;
+        }
+
+        .photo-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* --- 全屏看图器 --- */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .lightbox.show { display: flex; opacity: 1; }
+        .lightbox img { max-width: 100%; max-height: 100%; }
+        .close-lightbox {
+            position: absolute;
+            top: 20px; right: 20px;
+            color: #fff;
+            font-size: 30px;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        /* --- 底部 --- */
+        .footer { text-align: center; padding: 30px 0; font-size: 12px; color: #ccc; }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="appContainer">
+    <!-- 导航 -->
+    <div class="nav-bar">
+        <div class="back-btn" id="backBtn">❮ 返回</div>
+        <div class="nav-title" id="navTitle">宣讲回顾</div>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <!-- 首页：列表 -->
+    <div id="homePage" class="page active">
+        <div id="schoolList"></div>
+        <div class="footer">© 2023 校园招聘项目组</div>
+    </div>
+
+    <!-- 详情页：照片 -->
+    <div id="detailPage" class="page">
+        <div class="detail-header">
+            <div class="detail-title" id="detailTitle">学校名称</div>
+            <div class="detail-date" id="detailDate">日期</div>
+        </div>
+        <div class="photo-wall" id="photoWall"></div>
+    </div>
+</div>
+
+<!-- 看图器 -->
+<div class="lightbox" id="lightbox">
+    <div class="close-lightbox" id="closeLightbox">&times;</div>
+    <img src="" id="lightboxImg">
+</div>
+
+<script>
+    // ================= 数据配置区 =================
+    const schools = [
+        {
+            id: 1,
+            name: "铜陵学院",
+            date: "2023-10-15",
+            photos: [
+                "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80",
+                "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80",
+                "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&q=80"
+            ]
+        },
+        {
+            id: 2,
+            name: "安徽大学",
+            date: "2023-10-20",
+            photos: [
+                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
+                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+            ]
+        }
+        // 新增学校复制上面大括号内容
+    ];
+
+    // ================= 逻辑控制区 =================
+    const homePage = document.getElementById('homePage');
+    const detailPage = document.getElementById('detailPage');
+    const backBtn = document.getElementById('backBtn');
+    const navTitle = document.getElementById('navTitle');
+    const schoolListEl = document.getElementById('schoolList');
+    const photoWallEl = document.getElementById('photoWall');
+    const detailTitleEl = document.getElementById('detailTitle');
+    const detailDateEl = document.getElementById('detailDate');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    // 初始化
+    function init() {
+        renderList();
+        // 微信环境优化：设置顶部栏颜色为白色
+        setWeChatBarColor('#ffffff');
+    }
+
+    // 渲染列表
+    function renderList() {
+        let html = '';
+        schools.forEach(school => {
+            html += `
+                <div class="school-card" onclick="goToDetail(${school.id})">
+                    <div class="card-info">
+                        <h3>${school.name}</h3>
+                        <p>${school.date}</p>
+                    </div>
+                    <div class="arrow">›</div>
+                </div>
+            `;
+        });
+        schoolListEl.innerHTML = html;
+    }
+
+    // 跳转详情
+    window.goToDetail = function(id) {
+        const school = schools.find(s => s.id === id);
+        if(!school) return;
+
+        detailTitleEl.innerText = school.name;
+        detailDateEl.innerText = school.date;
+        
+        let photosHtml = '';
+        school.photos.forEach(src => {
+            photosHtml += `<div class="photo-item" onclick="openLightbox('${src}')"><img src="${src}" loading="lazy"></div>`;
+        });
+        photoWallEl.innerHTML = photosHtml;
+
+        // 切换页面
+        homePage.classList.remove('active');
+        detailPage.classList.add('active');
+        backBtn.style.display = 'block';
+        navTitle.innerText = '详情';
+        
+        // 滚动到顶部
+        document.getElementById('appContainer').scrollTop = 0;
+    };
+
+    // 返回
+    backBtn.onclick = function() {
+        detailPage.classList.remove('active');
+        homePage.classList.add('active');
+        backBtn.style.display = 'none';
+        navTitle.innerText = '宣讲回顾';
+    };
+
+    // 看图器
+    window.openLightbox = function(src) {
+        lightboxImg.src = src;
+        lightbox.classList.add('show');
+    };
+
+    document.getElementById('closeLightbox').onclick = function() {
+        lightbox.classList.remove('show');
+    };
+    
+    // 点击背景关闭
+    lightbox.onclick = function(e) {
+        if(e.target === lightbox) lightbox.classList.remove('show');
+    };
+
+    // 微信专用：尝试修改顶部状态栏颜色 (部分新版微信支持)
+    function setWeChatBarColor(color) {
+        // 这只是一个 meta 标签技巧，实际效果取决于微信版本
+        // 更稳妥的方式是使用微信 JSSDK，但那个需要后端签名，不符合你"纯前端"的要求
+        // 这里我们通过 CSS 让头部变白，视觉上融合
+    }
+
+    init();
+</script>
+</body>
+</html>
