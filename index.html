@@ -166,8 +166,18 @@
     const schools = [
         {
             id: 1,
-            name: "铜陵学院",
-            date: "2023-10-15",
+            name: "上海海事大学",
+            date: "2026-3-25",
+            photos: [
+                "images/上海理事大学/7e603da568912e75593780ecab3936a8.jpg",
+                "images/上海理事大学/45602bae87b22a71c5e8b18884e77c91.jpg",
+                "images/上海理事大学/a469cee2b1ae767d1da3135780dd7e1a.jpg"
+            ]
+        }, 
+        {
+            id: 2,
+            name: "上海理工大学",
+            date: "2026-3-27",
             photos: [
                 "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80",
                 "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80",
@@ -175,15 +185,42 @@
             ]
         },
         {
-            id: 2,
-            name: "安徽大学",
-            date: "2023-10-20",
+            id: 3,
+            name: "上海建桥学院",
+            date: "2026-4-2",
             photos: [
                 "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
                 "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
             ]
         }
-        // 新增学校复制上面大括号内容
+         {
+            id: 4,
+            name: "安徽信息工程学院",
+            date: "2026-4-8",
+            photos: [
+                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
+                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+            ]
+        }
+         {
+            id: 5,
+            name: "安徽建筑大学",
+            date: "2026-4-17",
+            photos: [
+                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
+                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+            ]
+        }
+         {
+            id: 6,
+            name: "中国传媒大学",
+            date: "2026-4-23",
+            photos: [
+                "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
+                "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80"
+            ]
+        }
+        
     ];
 
     // ================= 逻辑控制区 =================
@@ -271,9 +308,6 @@
 
     // 微信专用：尝试修改顶部状态栏颜色 (部分新版微信支持)
     function setWeChatBarColor(color) {
-        // 这只是一个 meta 标签技巧，实际效果取决于微信版本
-        // 更稳妥的方式是使用微信 JSSDK，但那个需要后端签名，不符合你"纯前端"的要求
-        // 这里我们通过 CSS 让头部变白，视觉上融合
     }
 
     init();
